@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '3.1.x', '6.0.x', '7.0.x' ]
+        #dotnet-version: [ '3.1.x', '6.0.x', '7.0.x' ]
+        dotnet-version: [ '7.0.x' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -16,9 +17,61 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      
       - name: Install dependencies
         run: dotnet restore
+      
       - name: Build
         run: dotnet build --configuration Release --no-restore
+
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Publish
+        run: dotnet publish --output $GITHUB_WORKSPACE\BlazorSrverSample\publish
+
+      - name: Zip published artifact
+        uses: vimtor/action-zip@v1.1
+        with:
+          files: $GITHUB_WORKSPACE\BlazorSrverSample\publish
+          dest: paganod.zip
+
+      - name: Create release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      # https://trstringer.com/github-actions-create-release-upload-artifacts/
+      - name: upload linux artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: $GITHUB_WORKSPACE\BlazorSrverSample\publish
+          asset_name: paganod.zip
+          asset_content_type: application/zip
+
+
+
+
+
+
+
+  # publish as zip file into folder
+  #publish:
+
+  #  runs-on: ubuntu-latest
+  #  steps:
+
