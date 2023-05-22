@@ -41,10 +41,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - uses: actions/download-artifact@master
+      - name: Download published artifact
+        uses: actions/download-artifact@master
         with:
           name: publish-artifact
-          path: ./publish
+          #path: ./publish
 
       - name: Zip published artifact
         uses: vimtor/action-zip@v1.1
