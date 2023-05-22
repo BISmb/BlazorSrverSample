@@ -73,7 +73,8 @@ jobs:
           tag_name: ${{ github.ref }}
           body: Changing changes #CHANGELOG.md
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.token }}
+          #GITHUB_TOKEN: ${{ github.token }}
 
       # https://trstringer.com/github-actions-create-release-upload-artifacts/
       - name: upload linux artifact
