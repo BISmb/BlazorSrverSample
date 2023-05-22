@@ -32,12 +32,12 @@ jobs:
 
     steps:
       - name: Publish
-        run: dotnet publish --output $GITHUB_WORKSPACE\BlazorSrverSample\publish
+        run: dotnet publish --output .\BlazorSrverSample\publish
 
       - name: Zip published artifact
         uses: vimtor/action-zip@v1.1
         with:
-          files: $GITHUB_WORKSPACE\BlazorSrverSample\publish
+          files: .\BlazorSrverSample\publish
           dest: paganod.zip
 
       - name: Create release
