@@ -38,11 +38,11 @@ jobs:
           name: publish-artifact
           path: ./publish
 
-      - name: Download artifact
-        uses: actions/download-artifact@master
-        with:
-          name: publish-artifact
-          path: ./publish
+      #- name: Download artifact
+      #  uses: actions/download-artifact@master
+      #  with:
+      #    name: publish-artifact
+      #    path: ./publish
 
   release:
     runs-on: ubuntu-latest
