@@ -46,6 +46,7 @@ jobs:
 
   release:
     needs: build
+    permissions: write-all #todo: fine-grain later
     runs-on: ubuntu-latest
 
     steps:
