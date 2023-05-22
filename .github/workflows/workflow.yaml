@@ -27,13 +27,21 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
+
+      # Publish / Release
       - name: Publish
         run: dotnet publish --output ./publish
 
-      - uses: actions/upload-artifact@master
+      - name: Save artifact
+        uses: actions/upload-artifact@master
         with:
           name: publish-artifact
           path: ./publish
+
+      - name: Download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: publish-artifact
 
   release:
     runs-on: ubuntu-latest
