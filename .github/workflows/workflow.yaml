@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        #dotnet-version: [ '3.1.x', '6.0.x', '7.0.x' ]
         dotnet-version: [ '7.0.x' ]
 
     steps:
@@ -27,8 +26,6 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
-
-      # Publish / Release
       - name: Publish
         run: dotnet publish --output ./publish
 
@@ -38,19 +35,12 @@ jobs:
           name: publish-artifact
           path: ./publish
 
-      #- name: Download artifact
-      #  uses: actions/download-artifact@master
-      #  with:
-      #    name: publish-artifact
-      #    path: ./publish
-
   release:
     needs: build
     permissions: write-all #todo: fine-grain later
     runs-on: ubuntu-latest
 
     steps:
-      #- uses: actions/checkout@master
 
       - name: Download published artifact
         uses: actions/download-artifact@master
@@ -64,18 +54,6 @@ jobs:
           files: ./publish
           dest: paganod.zip
 
-      #- name: Create release
-      #  uses: actions/create-release@v1
-      #  id: create_release
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #  with:
-      #    draft: false
-      #    prerelease: false
-      #    release_name: ${{ steps.version.outputs.version }}
-      #    tag_name: ${{ github.ref }}
-      #    body: Changing changes #CHANGELOG.md
-
       - name: "Create release"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -85,27 +63,3 @@ jobs:
           title: "Release Build"
           files: |
             paganod.zip
-
-      ## https://trstringer.com/github-actions-create-release-upload-artifacts/
-      #- name: upload linux artifact
-      #  uses: actions/upload-release-asset@v1
-      #  env:
-      #    GITHUB_TOKEN: ${{ github.token }}
-      #  with:
-      #    upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #    asset_path: ./publish
-      #    asset_name: paganod.zip
-      #    asset_content_type: application/zip
-
-
-
-
-
-
-
-  # publish as zip file into folder
-  #publish:
-
-  #  runs-on: ubuntu-latest
-  #  steps:
-
